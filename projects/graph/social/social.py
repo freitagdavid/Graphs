@@ -68,17 +68,21 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
+        # create a queue with first user id
+        # Create a library for visited nodes and their paths
+        # keep going as long as their is something in the queue
 
         q = deque([userID])
         visited = {}
-        while len(q) > 0:
+        while q:
             path = q.popleft()
             if isinstance(path, int):
                 path = [path]
+            # print(path)
             v = path[-1]
             if v not in visited:
                 visited[v] = path
-                for next_v in self.friendships[userID]:
+                for next_v in self.friendships[v]:
                     new_path = list(path)
                     new_path.append(next_v)
                     q.append(new_path)
@@ -89,6 +93,7 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
     print(sg.friendships)
+    print(sg.friendships[1])
     connections = sg.getAllSocialPaths(1)
     print(connections)
     # runMultiple()
