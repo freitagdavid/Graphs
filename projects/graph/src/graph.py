@@ -25,16 +25,16 @@ class Graph:
         if vertex_a in self.vertices and vertex_b in self.vertices:
             self.vertices[str(vertex_a)].add(str(vertex_b))
 
-    def bft(self, start):
-        queue = deque([start])
+    def bft(self, v):
+        q = deque([v])
         visited = set()
-        while len(queue) > 0:
-            vertex = queue.popleft()
+        while len(q) > 0:
+            vertex = q.popleft()
             if vertex not in visited:
                 visited.add(vertex)
                 for i in self.vertices[vertex]:
-                    queue.append(i)
-        print(visited)
+                    q.append(i)
+        return visited
 
     def dft(self, v, visited=set(), output=set()):
         output.add(v)
@@ -44,16 +44,39 @@ class Graph:
                 self.dft(i, visited, output)
         return output
 
-    # def dft_util(self, v, visited):
-    #     visited[int(v)] = True
-    #     print(v)
-    #     for i in self.vertices[v]:
-    #         if not visited[int(i)]:
-    #             self.dft_util(i, visited)
+    def bfs(self, v, goal_v):
+        q = deque([v])
+        visited = set()
+        while len(q) > 0:
+            path = q.popleft()
+            v = path[-1]
+            if v not in visited:
+                if v == goal_v:
+                    return path
+                visited.add(v)
+                for next_v in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_v)
+                    q.append(new_path)
+        return None
 
-    # def dft(self, v):
-    #     visited = [False]*(len(self.vertices))
-    #     return self.dft_util(v, visited)
+    def dfs(self, v, goal_v):
+        s = []
+        s.append(v)
+        visited = set()
+        while s:
+            path = s.pop()
+            v = path[-1]
+            if v not in visited:
+                if v == goal_v:
+                    return path
+                visited.add(v)
+                for next_v in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_v)
+                    s.append(new_path)
+        return None
+
 
 
 graph = Graph()  # Instantiate your graph
@@ -64,6 +87,7 @@ graph.add_vertex('4')
 graph.add_vertex('5')
 graph.add_vertex('6')
 graph.add_vertex('7')
+graph.add_vertex('8')
 graph.add_directed_edge('5', '3')
 graph.add_directed_edge('6', '3')
 graph.add_directed_edge('7', '1')
@@ -74,9 +98,11 @@ graph.add_directed_edge('2', '4')
 graph.add_directed_edge('3', '5')
 graph.add_directed_edge('2', '3')
 graph.add_directed_edge('4', '6')
-graph.bft('1')
-print(graph.dft('1'))
-# print(graph.dfs('1'))
+graph.add_edge('8', '1')
+print('bft:', graph.bft('1'))
+print('dft:', graph.dft('1'))
+print(graph.bfs('1', '6'))
+print(graph.dfs('1', '6'))
 
 # pp = pprint.PrettyPrinter(indent=4)
 
