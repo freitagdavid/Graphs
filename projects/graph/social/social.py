@@ -1,8 +1,11 @@
+import random
+from collections import deque
 
 
 class User:
     def __init__(self, name):
         self.name = name
+
 
 class SocialGraph:
     def __init__(self):
@@ -44,11 +47,17 @@ class SocialGraph:
         self.lastID = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
 
-        # Add users
-
-        # Create friendships
+        for i in range(numUsers):
+            self.addUser(f'User {i}')
+        possibleFriendships = []
+        for userID in self.users:
+            for friendID in range(userID + 1, self.lastID + 1):
+                possibleFriendships.append((userID, friendID))
+        random.shuffle(possibleFriendships)
+        for i in range(numUsers * avgFriendships // 2):
+            friendship = possibleFriendships[i]
+            self.addFriendship(friendship[0], friendship[1])
 
     def getAllSocialPaths(self, userID):
         """
@@ -60,8 +69,30 @@ class SocialGraph:
         The key is the friend's ID and the value is the path.
         """
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        for i in self.friendships[userID]:
+            visited[i] = self.bfs(userID, i, self.friendships)
         return visited
+
+    def bfs(self, v, goal_v, graph):
+        q = deque([v])
+        visited = set()
+        firstRun = True
+        while q:
+            path = q.popleft()
+            if firstRun:
+                v = path
+            if not firstRun:
+                v = path[-1]
+            if v not in visited:
+                if v == goal_v:
+                    return path
+                visited.add(v)
+                for next_v in graph[int(v)]:
+                    new_path = [path]
+                    new_path.append(next_v)
+                    q.append(new_path)
+            firstRun = False
+        return None
 
 
 if __name__ == '__main__':
