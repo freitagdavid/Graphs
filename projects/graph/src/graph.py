@@ -49,6 +49,7 @@ class Graph:
         visited = set()
         while len(q) > 0:
             path = q.popleft()
+            print(path)
             v = path[-1]
             if v not in visited:
                 if v == goal_v:
@@ -76,7 +77,6 @@ class Graph:
                     new_path.append(next_v)
                     s.append(new_path)
         return None
-
 
 
 graph = Graph()  # Instantiate your graph
