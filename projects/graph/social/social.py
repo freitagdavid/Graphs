@@ -68,98 +68,27 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
-        for i in self.bft(userID):
-            visited[i] = self.bfs(userID, i, self.friendships)
-        return visited
 
-    def bft(self, v):
-        q = deque([v])
-        visited = set()
-        while len(q) > 0:
-            vertex = q.popleft()
-            if vertex not in visited:
-                visited.add(vertex)
-                for i in self.friendships[vertex]:
-                    q.append(i)
-        return visited
-
-    def bfs(self, v, goal_v, graph):
-        q = deque([v])
-        visited = set()
+        q = deque([userID])
+        visited = {}
         while len(q) > 0:
             path = q.popleft()
-            if isinstance(path, list):
-                v = path[-1]
             if isinstance(path, int):
-                v = path
+                path = [path]
+            v = path[-1]
             if v not in visited:
-                if v == goal_v:
-                    return path
-                visited.add(v)
-                for next_v in graph[v]:
-                    if isinstance(path, list):
-                        new_path = list(path)
-                    if isinstance(path, int):
-                        new_path = [path]
+                visited[v] = path
+                for next_v in self.friendships[userID]:
+                    new_path = list(path)
                     new_path.append(next_v)
                     q.append(new_path)
-        return None
-
-    # def bfs(self, v, goal_v, graph):
-    #     q = deque([v])
-    #     visited = set()
-    #     firstRun = True
-    #     while q:
-    #         path = q.popleft()
-    #         if firstRun:
-    #             v = path
-    #         if not firstRun:
-    #             v = path[-1]
-    #         if v not in visited:
-    #             if v == goal_v:
-    #                 if firstRun:
-    #                     return [path]
-    #                 return path
-    #             visited.add(v)
-    #             for next_v in graph[int(v)]:
-    #                 if firstRun:
-    #                     new_path = [path]
-    #                 if not firstRun:
-    #                     new_path = path
-    #                 new_path.append(next_v)
-    #                 q.append(new_path)
-    #         firstRun = False
-    #     return None
-
-
-# def runMultiple():
-#     averages = []
-#     for i in range(50):
-#         averages.append(get_average_separation())
-#     total = 0
-#     for i in averages:
-#         total += i
-#     print(total/len(averages))
-
-
-# def get_average_separation():
-#     sg = SocialGraph()
-#     sg.populateGraph(1000, 5)
-#     connections = []
-#     for i in sg.users:
-#         connections.append(len(sg.getAllSocialPaths(i)))
-#     total = 0
-#     for i in connections:
-#         total += connections[i]
-#     return total/len(connections)
+        return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
-    # print(sg.friendships)
+    print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
     print(connections)
-    # print(len(connections))
     # runMultiple()
