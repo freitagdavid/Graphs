@@ -3,7 +3,6 @@ from player import Player
 from world import World
 from collections import deque
 import random
-from time import sleep
 from shutil import get_terminal_size
 dbg = False
 
@@ -60,37 +59,9 @@ def walk(dir, traversal_graph):
     traversal_graph[new_room_id][invert_dir(dir)] = current_room_id
     return traversal_graph
 
-
-# def gen_traversal_graph():
-#     global loops
-#     room_id = player.currentRoom.id
-#     traversal_graph = {}
-#     populate_room(traversal_graph)
-#     path = []
-#     while True and loops < 2000:
-#         loops += 1
-#         for e in traversal_graph[room_id]:
-#             traversal_graph = walk(e, traversal_graph)
-
-
-# def get_all_paths(v):
-#     loops = 0
-#     q = deque(player.currentRoom.getExits())
-#     visited = {}
-#     print(q)
-#     print(v)
-#     while q and len(visited) < len(roomGraph) and loops < 1000:
-#         path = q.popleft()
-#         loops += 1
-#     return visited
-
-
 def move(direction):
     player.travel(direction)
     traversalPath.append(direction)
-
-
-# print(gen_traversal_graph())
 
 def dft():
     loops = 0
@@ -129,30 +100,7 @@ def dft():
             print('\n')
             print('Direction:', direction)
             print("#" * terminal_size.columns)
-    # print(traversalPath)
 
-# def dft(start_v):
-#     loops = 0
-#     q = deque([world.startingRoom.id])
-#     visited = {}
-#     while q and loops < 2000:
-#         loops += 1
-#         path = q.popleft()
-#         if isinstance(path, int):
-#             path = [path]
-#         new_v = path[-1]
-#         print('new_v', new_v)
-#         if new_v not in visited:
-#             visited[new_v] = path
-#             for direction in roomGraph[new_v][1]:
-#                 new_path = list(path)
-#                 new_path.append(direction)
-#                 q.append(new_path)
-#     print('queue', q)
-#     print('visited', visited)
-
-
-# dft(world.startingRoom.id)
 dft()
 
 # TRAVERSAL TEST
