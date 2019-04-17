@@ -2,7 +2,6 @@ from room import Room
 from player import Player
 from world import World
 from collections import deque
-import random
 from shutil import get_terminal_size
 dbg = False
 
